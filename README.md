@@ -2,6 +2,13 @@
 
 A native macOS menu bar application that stores and manages your clipboard history with support for text, images, search, and organization.
 
+## Screenshots
+
+<img width="509" height="571" alt="image" src="https://github.com/user-attachments/assets/8d8ef0c0-3c02-4954-b5e8-29efba404f6e" />
+
+<img width="585" height="568" alt="image" src="https://github.com/user-attachments/assets/675da567-3e2b-4fdd-96a5-66cfe29d66bd" />
+
+
 ## Features
 
 - **Background Monitoring**: Automatically captures everything you copy (text and images)
