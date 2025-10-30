@@ -254,9 +254,10 @@ The app requires:
 - The clipboard is polled every 0.5 seconds for changes
 - Clipboard history persists in SQLite database between sessions
 - The database maintains up to your configured maximum items (default 30)
-- Pinned items appear first, then items sorted by timestamp
+- **Pinned items** appear at the top, then all other items sorted by timestamp (newest first)
+- **Sticky items** never expire by time and don't count towards the maximum items limit
+- Sticky items are sorted by timestamp with regular items (not kept at the top)
 - Pinned and sticky items don't count towards the maximum items limit
-- Sticky items never expire and are always kept
 - Keywords are stored as comma-separated values in the database
 - Search is performed in real-time on both content and keywords
 - Images can be searched by dimensions (e.g., "1920×1080")

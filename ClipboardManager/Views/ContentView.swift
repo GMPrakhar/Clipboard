@@ -134,28 +134,38 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(filteredItems) { item in
-                            ClipboardItemRow(
-                                item: item,
-                                isHovered: hoveredItemId == item.id,
-                                isSelected: selectedItemId == item.id,
-                                onPaste: { pasteItem(item) },
-                                onPin: { togglePin(item) },
-                                onSticky: { toggleSticky(item) },
-                                onKeywords: {
-                                    selectedItemId = item.id
-                                    showingKeywordSheet = true
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(filteredItems) { item in
+                                ClipboardItemRow(
+                                    item: item,
+                                    isHovered: hoveredItemId == item.id,
+                                    isSelected: selectedItemId == item.id,
+                                    onPaste: { pasteItem(item) },
+                                    onPin: { togglePin(item) },
+                                    onSticky: { toggleSticky(item) },
+                                    onKeywords: {
+                                        selectedItemId = item.id
+                                        showingKeywordSheet = true
+                                    }
+                                )
+                                .id(item.id)
+                                .onHover { hovering in
+                                    hoveredItemId = hovering ? item.id : nil
                                 }
-                            )
-                            .onHover { hovering in
-                                hoveredItemId = hovering ? item.id : nil
+                                
+                                if item.id != filteredItems.last?.id {
+                                    Divider()
+                                        .padding(.leading, 12)
+                                }
                             }
-                            
-                            if item.id != filteredItems.last?.id {
-                                Divider()
-                                    .padding(.leading, 12)
+                        }
+                    }
+                    .onChange(of: selectedItemId) { newId in
+                        if let newId = newId {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                proxy.scrollTo(newId, anchor: .center)
                             }
                         }
                     }

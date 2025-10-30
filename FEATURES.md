@@ -32,7 +32,11 @@ This document summarizes the advanced features implemented in the Clipboard Mana
   - Click the clock icon
   - Sticky items show a green checkmark badge
 - **Storage**: `is_sticky` column in SQLite database
-- **Behavior**: Excluded from retention period cleanup
+- **Behavior**: 
+  - Excluded from retention period cleanup (never expire by time)
+  - Don't count towards maximum items limit
+  - Sorted by timestamp with regular items (NOT kept at top)
+  - Only pinned items appear at the top
 - **Use Cases**: Passwords, frequently used snippets, templates
 
 ### 5. Keywords/Tags ✅
@@ -80,7 +84,7 @@ CREATE INDEX idx_pinned ON clipboard_items(is_pinned DESC, timestamp DESC);
   - Schema migration for existing databases
   - Updated queries to respect sticky items in cleanup
   - New `updateItem()` method for pin/sticky/keywords
-  - Sorting: pinned first, then by timestamp
+  - Sorting: pinned items first, then all other items (including sticky) by timestamp
 
 ### UI Components
 

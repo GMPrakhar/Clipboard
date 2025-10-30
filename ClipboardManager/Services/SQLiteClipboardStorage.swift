@@ -179,12 +179,13 @@ class SQLiteClipboardStorage: ClipboardStorageProtocol, ObservableObject {
             return item1.timestamp > item2.timestamp
         }
         
-        // Separate pinned/sticky items from regular items
-        let pinnedOrSticky = sortedItems.filter { $0.isPinned || $0.isSticky }
-        let regular = sortedItems.filter { !$0.isPinned && !$0.isSticky }
+        // Separate pinned items from regular/sticky items
+        // Only pinned items go to the top, sticky items are sorted with regular items by timestamp
+        let pinned = sortedItems.filter { $0.isPinned }
+        let regularAndSticky = sortedItems.filter { !$0.isPinned }
         
-        // Take maxItems from regular items, but include all pinned/sticky
-        items = pinnedOrSticky + Array(regular.prefix(maxItems))
+        // Take maxItems from regular/sticky items, but include all pinned items
+        items = pinned + Array(regularAndSticky.prefix(maxItems))
     }
     
     private func cleanupExpiredItems() {
@@ -287,7 +288,8 @@ class SQLiteClipboardStorage: ClipboardStorageProtocol, ObservableObject {
             sqlite3_finalize(statement)
         }
         
-        // Remove old items beyond maxItems (excluding pinned/sticky)
+        // Remove old items beyond maxItems (excluding pinned and sticky)
+        // Sticky items don't count towards maxItems limit and never expire
         let maxItems = SettingsManager.shared.maxItems
         let deleteQuery = """
         DELETE FROM clipboard_items
